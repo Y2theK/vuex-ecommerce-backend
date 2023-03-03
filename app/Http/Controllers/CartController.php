@@ -13,9 +13,25 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $carts = Cart::with('products')->get();
+        $carts = Cart::with('products');
+        if ($request->startdate && $request->enddate) {
+            $startDate = date($request->startdate);
+            $endDate = date($request->enddate);
+            $carts = $carts->whereBetween('date', [$startDate,$endDate]);
+            // dd($carts);
+        }
+        if ($request->query('sort')) {
+            $sort = strtolower($request->query('sort'));
+            $carts = $carts->orderBy('id', $sort);
+        }
+        if ($request->query('limit')) {
+            $limit = request()->query('limit');
+            $carts = $carts->paginate($limit);
+        } else {
+            $carts = $carts->get();
+        }
         return CartResource::collection($carts);
     }
 
@@ -64,5 +80,11 @@ class CartController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getCartsByUser(Request $request)
+    {
+        $carts = Cart::with('products')->where('user_id', $request->userId)->get();
+        // dd($carts);
+        return CartResource::collection($carts);
     }
 }

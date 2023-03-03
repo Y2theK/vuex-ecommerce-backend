@@ -16,7 +16,23 @@ class ProductController extends Controller
     public function index()
     {
         //get products with their category
-        return ProductResource::collection(Product::with('category')->get());
+        // dd(request()->query('limit'));
+        
+        $products = Product::with('category');
+        // querying with sorting
+        if (request()->query('sort')) {
+            $sort = strtolower(request()->query('sort'));
+            $products = $products->orderBy('id', $sort);
+        }
+        //querying with limitation
+        if (request()->query('limit')) {
+            $limit = request()->query('limit');
+            $products =$products->paginate($limit);
+        } else {
+            $products = $products->get();
+        }
+        // $products = $products->get();
+        return ProductResource::collection($products);
     }
 
     /**
@@ -62,5 +78,14 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getProductsByCategory(Request $request)
+    {
+        $categoryName = $request->category;
+        $products = Product::with('category')->whereHas('category', function ($query) use ($categoryName) {
+            $query->where('name', $categoryName);
+        })->get();
+        // dd($products);
+        return ProductResource::collection($products);
     }
 }

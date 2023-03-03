@@ -22,7 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/products/categories', [CategoryController::class,'index']); //get all categories
+Route::get('/products/category/{category}', [ProductController::class,'getProductsByCategory']);
 Route::apiResource('products', ProductController::class);
+
+Route::get('carts/user/{userId}', [CartController::class,'getCartsByUser']);
 Route::apiResource('carts', CartController::class);
+
 Route::apiResource('categories', CategoryController::class);
+
 Route::apiResource('users', UserController::class);
