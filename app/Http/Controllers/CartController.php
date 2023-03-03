@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -13,7 +15,8 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        $carts = Cart::with('products')->get();
+        return CartResource::collection($carts);
     }
 
     /**
@@ -33,9 +36,11 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cart $cart)
     {
-        //
+        $cart = Cart::with('products')->findOrFail($cart->id);
+        // dd($cart);
+        return new CartResource($cart);
     }
 
     /**

@@ -17,7 +17,7 @@ class ProductFactory extends Factory
         $category = Category::inRandomOrder()->first();
         return [
             'title' => $this->faker->word(),
-            'price' => rand(99, 999),
+            'price' => $this->faker->randomFloat(8, 9, 99),
             'description' => $this->faker->sentence(),
             'image' => $this->faker->image(),
             'category_id' => $category->id
