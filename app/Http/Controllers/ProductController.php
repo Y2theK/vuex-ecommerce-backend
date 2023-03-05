@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //get products with their category
@@ -35,49 +34,59 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    
+    public function store(ProductRequest $request)
     {
-        //
+        $validated_data = $request->validated();
+        // return $validated_data;
+        $filename = uniqid()."-".$request->file('image')->getClientOriginalName();
+        // return $filename;
+        // $path = $request->file('image')->storeAs('products', $filename, 'public');
+        $path = Storage::putFileAs("products", $request->file('image'), $filename, 'public');
+        // return $path;
+        $validated_data['image'] = "storage/$path";
+        // dd($validated_data);
+        $product =  Product::create($validated_data);
+        return new ProductResource($product);
+        // return $product;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show(Product $product)
     {
         return new ProductResource($product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        // return $request->all();
+        $validated_data = $request->validated();
+        $validated_data['image'] = $product->image;
+        if ($request->hasFile('image')) {
+            Storage::delete($product->image);
+
+            $filename = uniqid()."-".$request->file('image')->getClientOriginalName();
+            $path = Storage::putFileAs('products', $request->file('image'), $filename, 'public');
+            $validated_data['image'] = "storage/$path";
+        }
+        // return $validated_data;
+        $product->update($validated_data);
+        $product = Product::find($product->id);
+        return new ProductResource($product);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    
+    public function destroy(Product $product)
     {
-        //
+        //delete image
+        Storage::delete($product->image);
+
+        //delete in carts_product table
+        // $product->carts()->detach($product->id);
+
+        $product =  $product->delete();  //onDeleteCascade
+        return response()->json(["message" => "Product Successfully Deleted"], 200);
     }
     public function getProductsByCategory(Request $request)
     {
