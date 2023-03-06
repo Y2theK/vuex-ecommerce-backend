@@ -23,19 +23,37 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+//products routes
+Route::prefix('/products')->group(function () {
+    Route::get('/', [ProductController::class,'index']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/categories', [CategoryController::class,'getOnlyCategoriesName']); //get all categories name
+        Route::get('/category/{category}', [ProductController::class,'getProductsByCategory']);
+        Route::apiResource('/', ProductController::class)->except('index');
+    });
+});
+//categories routes
+Route::prefix('/categories')->group(function () {
+    Route::get('/', [CategoryController::class,'index']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::apiResource('/', CategoryController::class)->except('index');
+    });
+});
+
+// //carts routes
+Route::prefix('/carts')->middleware('auth:sactum')->group(function () {
+    Route::get('/user/{userId}', [CartController::class,'getCartsByUser']);
+    Route::apiResource('/', CartController::class);
+});
+// //users routes
+Route::prefix('/users')->middleware('auth:sactum')->group(function () {
+    Route::apiResource('/', UserController::class);
+});
+
+// //auth routes
 Route::post('/register', [AuthController::class,'register']);
 Route::post('/login', [AuthController::class,'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
 });
-
-Route::get('/products/categories', [CategoryController::class,'getOnlyCategoriesName']); //get all categories name
-Route::get('/products/category/{category}', [ProductController::class,'getProductsByCategory']);
-Route::apiResource('products', ProductController::class);
-
-Route::get('carts/user/{userId}', [CartController::class,'getCartsByUser']);
-Route::apiResource('carts', CartController::class);
-
-Route::apiResource('categories', CategoryController::class);
-
-Route::apiResource('users', UserController::class);
