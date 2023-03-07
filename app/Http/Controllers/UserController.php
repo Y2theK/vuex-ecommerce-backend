@@ -42,7 +42,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         $user->update($request->validated());
-        $user = User::findOrFail($user->id);
+        // $user = User::findOrFail($user->id);
         return new UserResource($user);
     }
 

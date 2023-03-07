@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $validated_data = $request->validated();
         // return $validated_data;
         $category->update($validated_data);
-        $category =  Category::find($category->id);
+        // $category =  Category::find($category->id);
         return new CategoryResource($category);
     }
 

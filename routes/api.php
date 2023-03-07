@@ -14,30 +14,30 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 //products routes
-Route::prefix('/products')->group(function () {
-    Route::get('/', [ProductController::class,'index']);
+Route::group([], function () {
+    Route::get('/products/category/{category}', [ProductController::class,'getProductsByCategory']);
+    Route::get('/products/categories', [CategoryController::class,'getOnlyCategoriesName']); //get all categories name
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/categories', [CategoryController::class,'getOnlyCategoriesName']); //get all categories name
-        Route::get('/category/{category}', [ProductController::class,'getProductsByCategory']);
-        Route::apiResource('/', ProductController::class)->except('index');
+        Route::apiResource('/products', ProductController::class);
     });
+    Route::get('/products', [ProductController::class,'index']);
 });
 //categories routes
-Route::prefix('/categories')->group(function () {
-    Route::get('/', [CategoryController::class,'index']);
+Route::group([], function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::apiResource('/', CategoryController::class)->except('index');
+        Route::apiResource('/categories', CategoryController::class);
     });
+    Route::get('/categories', [CategoryController::class,'index']);
 });
 
-// //carts routes
-Route::prefix('/carts')->middleware('auth:sactum')->group(function () {
-    Route::get('/user/{userId}', [CartController::class,'getCartsByUser']);
-    Route::apiResource('/', CartController::class);
+//carts routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/carts/user/{userId}', [CartController::class,'getCartsByUser']);
+    Route::apiResource('/carts', CartController::class);
 });
-// //users routes
-Route::prefix('/users')->middleware('auth:sactum')->group(function () {
-    Route::apiResource('/', UserController::class);
+//users routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('/users', UserController::class);
 });
 
 require('auth.php');

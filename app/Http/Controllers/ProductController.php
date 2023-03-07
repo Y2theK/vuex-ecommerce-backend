@@ -72,7 +72,6 @@ class ProductController extends Controller
         }
         // return $validated_data;
         $product->update($validated_data);
-        $product = Product::find($product->id);
         return new ProductResource($product);
     }
 

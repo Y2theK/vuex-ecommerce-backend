@@ -27,7 +27,8 @@ class UserRequest extends FormRequest
         // $user = auth()->user();
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            // 'email' => ['required','unique:users,email'.$this->user->id],
+            'email' => ['required',Rule::unique('users')->ignore($this->user)],
             'password' => [Rule::when(request()->isMethod('POST'), 'required'),'string','min:6'],
             'phone' => 'required|string',
             'company' => 'string|nullable',
