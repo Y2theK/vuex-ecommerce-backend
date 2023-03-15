@@ -28,7 +28,7 @@ class ProductController extends Controller
             $limit = request()->query('limit');
             $products =$products->paginate($limit);
         } else {
-            $products = $products->get();
+            $products = $products->paginate();
         }
         // $products = $products->get();
         return ProductResource::collection($products);
@@ -92,7 +92,7 @@ class ProductController extends Controller
         $categoryName = $request->category;
         $products = Product::with('category')->whereHas('category', function ($query) use ($categoryName) {
             $query->where('name', $categoryName);
-        })->get();
+        })->paginate();
         // dd($products);
         return ProductResource::collection($products);
     }
