@@ -20,6 +20,8 @@ class CreateProductsTable extends Migration
             $table->string('description');
             $table->string('image');
             $table->foreignId('category_id');
+            $table->decimal('rate', 8, 1);
+            $table->integer('count');
             $table->timestamps();
         });
     }

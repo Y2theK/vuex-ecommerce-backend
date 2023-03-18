@@ -92,7 +92,7 @@ class ProductController extends Controller
         $categoryName = $request->category;
         $products = Product::with('category')->whereHas('category', function ($query) use ($categoryName) {
             $query->where('name', $categoryName);
-        })->paginate();
+        })->paginate(4);
         // dd($products);
         return ProductResource::collection($products);
     }

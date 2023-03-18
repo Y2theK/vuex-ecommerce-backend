@@ -21,6 +21,7 @@ Route::group([], function () {
         Route::apiResource('/products', ProductController::class);
     });
     Route::get('/products', [ProductController::class,'index']);
+    Route::get('/products/{product}', [ProductController::class,'show']);
 });
 //categories routes
 Route::group([], function () {
