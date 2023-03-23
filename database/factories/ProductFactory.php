@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
@@ -15,10 +17,14 @@ class ProductFactory extends Factory
     public function definition()
     {
         $category = Category::inRandomOrder()->first();
+
+        $productPrefixes = ['Sweater', 'Pants', 'Shirt', 'Hat', 'Glasses', 'Socks'];
+        $name = $this->faker->company . ' ' . Arr::random($productPrefixes);
         return [
-            'title' => $this->faker->word(),
-            'price' => $this->faker->randomFloat(8, 9, 99),
-            'description' => $this->faker->sentence(),
+            'title' => $name,
+            'slug' => Str::slug($name),
+            'price' => $this->faker->randomFloat(8, 50, 100),
+            'description' => $this->faker->realText(320),
             'image' => $this->faker->imageUrl($width=400, $height=400, ),
             'category_id' => $category->id,
             'rate' => $this->faker->randomFloat(8, 0, 5),

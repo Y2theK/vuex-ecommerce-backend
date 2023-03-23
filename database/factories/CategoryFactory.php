@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
@@ -13,8 +14,14 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => $this->faker->word()
-        ];
+        // $name = $this->faker->jobTitle;
+        // $nameArr = explode(' ', $name);
+        // $name = trim($nameArr[0]);
+
+        // $productPrefixes = ['Sweater', 'Pants', 'Shirt', 'Hat', 'Glasses', 'Socks'];
+        // $name = Arr::random($productPrefixes);
+        // return [
+        //     'name' => $name
+        // ];
     }
 }

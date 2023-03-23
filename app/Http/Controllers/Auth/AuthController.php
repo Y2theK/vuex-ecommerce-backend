@@ -36,7 +36,7 @@ class AuthController extends Controller
         $user = User::where('email', $validated_data['email'])->first();
         if (!$user || !Hash::check($validated_data['password'], $user->password)) {
             return response([
-                'msg' => 'Invalid Credential'
+                'message' => 'Invalid Credential'
             ], 401);
         }
 

@@ -17,6 +17,8 @@ class CreateCartsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->date('date');
+            $table->string('transaction_id');
+            $table->decimal('total')->default(0);
             $table->timestamps();
         });
     }
