@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
@@ -24,6 +25,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $validated_data = $request->validated();
+        $validated_data['slug'] = Str::slug($request->name);
         $category = Category::create($validated_data);
         return new CategoryResource($category);
     }
@@ -38,6 +40,7 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $validated_data = $request->validated();
+        $validated_data['slug'] = Str::slug($request->name);
         // return $validated_data;
         $category->update($validated_data);
         // $category =  Category::find($category->id);

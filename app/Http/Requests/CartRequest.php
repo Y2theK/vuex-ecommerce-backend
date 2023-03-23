@@ -26,7 +26,9 @@ class CartRequest extends FormRequest
         return [
             'user_id' => 'required|integer',
             'date' => 'required|date',
-            'products' => 'required|array|min:1'
+            'products' => 'required|array|min:1',
+            'transaction_id' => 'string',
+            'total' => 'required|numeric'
         ];
     }
 }

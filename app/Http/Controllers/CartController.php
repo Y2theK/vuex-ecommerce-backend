@@ -54,7 +54,7 @@ class CartController extends Controller
         );
 
 
-        $cart = Cart::with('products')->findOrFail($cart->id);
+        // $cart = Cart::with('products')->findOrFail($cart->id);
         // dd($cart);
         return new CartResource($cart);
     }
@@ -83,7 +83,7 @@ class CartController extends Controller
             $validated_data['products']
         );
         
-        $cart = Cart::with('products')->findOrFail($cart->id);
+        // $cart = Cart::with('products')->findOrFail($cart->id);
         // dd($cart);
         return new CartResource($cart);
     }

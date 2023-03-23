@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
@@ -45,6 +46,7 @@ class ProductController extends Controller
         $path = Storage::putFileAs("products", $request->file('image'), $filename, 'public');
         // return $path;
         $validated_data['image'] = "storage/$path";
+        $validated_data['slug'] = Str::slug($request->title);
         // dd($validated_data);
         $product =  Product::create($validated_data);
         return new ProductResource($product);
@@ -63,6 +65,7 @@ class ProductController extends Controller
         // return $request->all();
         $validated_data = $request->validated();
         $validated_data['image'] = $product->image;
+        $validated_data['slug'] = Str::slug($request->title);
         if ($request->hasFile('image')) {
             Storage::delete($product->image);
 
@@ -71,6 +74,7 @@ class ProductController extends Controller
             $validated_data['image'] = "storage/$path";
         }
         // return $validated_data;
+
         $product->update($validated_data);
         return new ProductResource($product);
     }
