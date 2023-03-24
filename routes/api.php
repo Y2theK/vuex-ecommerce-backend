@@ -34,6 +34,7 @@ Route::group([], function () {
 //carts routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/carts/user/{userId}', [CartController::class,'getCartsByUser']);
+    Route::post('/purchase', [CartController::class,'purchase']);
     Route::apiResource('/carts', CartController::class);
 });
 //users routes

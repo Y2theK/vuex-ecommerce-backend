@@ -31,6 +31,10 @@ class UserUpdateRequest extends FormRequest
             // 'password' => [Rule::when(request()->isMethod('POST'), 'required'),'string','min:6'],
             'phone' => 'required|string',
             'company' => 'string|nullable',
+            'address' => 'string | nullable',
+            'city' => 'string | nullable',
+            'state' => 'string | nullable',
+            'zip_code' => 'string | nullable',
         ];
     }
 }

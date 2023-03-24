@@ -29,7 +29,9 @@ class ProductRequest extends FormRequest
             'description' => 'required|string',
             'price' => 'required|numeric',
             'image' => [Rule::when(request()->isMethod('POST'), 'required')],'image|max:2048',
-            'category_id' => 'required|integer'
+            'category_id' => 'required|integer',
+            'rate' => 'numeric|required',
+            'count' => 'integer|required'
         ];
     }
 }

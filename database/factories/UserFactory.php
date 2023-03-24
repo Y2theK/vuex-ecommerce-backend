@@ -24,7 +24,8 @@ class UserFactory extends Factory
             'company' => $this->faker->company(),
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'country' => $this->faker->country,
+            'state' => $this->faker->state,
+            'zip_code' => $this->faker->postcode
         ];
     }
 

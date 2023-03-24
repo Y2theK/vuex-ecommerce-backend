@@ -47,7 +47,7 @@ class ProductController extends Controller
         // return $path;
         $validated_data['image'] = "storage/$path";
         $validated_data['slug'] = Str::slug($request->title);
-        // dd($validated_data);
+        // var_dump($validated_data);
         $product =  Product::create($validated_data);
         return new ProductResource($product);
         // return $product;
